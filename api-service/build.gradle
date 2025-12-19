@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.sacreson'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Самое важное: подключаем наш соседний модуль
+    implementation project(':common-lib')
+
+    // Подключаем Web (Tomcat, REST и т.д.)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.postgresql:postgresql'
+}
+
+test {
+    useJUnitPlatform()
+}

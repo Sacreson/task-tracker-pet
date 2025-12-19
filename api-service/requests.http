@@ -1,0 +1,137 @@
+### Создание задачи (Правильный способ через Body)
+POST http://localhost:8080/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Купить молоко",
+  "description": "И хлеба тоже"
+}
+
+### Создание задачи 2
+POST http://localhost:8080/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Помыть машину",
+  "description": "На самомойке"
+}
+
+### Создание задачи 3
+POST http://localhost:8080/api/tasks
+Content-Type: application/json
+
+{
+  "title": "Сделать уроки",
+  "description": "Только самые важные"
+}
+
+### Получение задач по фильтру "купить"
+GET http://localhost:8080/api/tasks?prefix_name=купить
+Accept: application/json
+
+### Получение задач по фильтру "м"
+GET http://localhost:8080/api/tasks?prefix_name=м
+Accept: application/json
+
+### Обновление задачи
+PATCH http://localhost:8080/api/tasks/1
+Content-Type: application/json
+
+{
+  "title": "Сделать проект",
+  "description": "Конечно же на микросервисах",
+  "status": "IN_PROGRESS"
+}
+
+### Удадениие задачи
+DELETE http://localhost:8080/api/tasks/1
+Accept: application/json
+
+### Удадениие несущесивующей задачи
+DELETE http://localhost:8080/api/tasks/100
+Accept: application/json
+
+### Получение всех задач
+GET http://localhost:8080/api/tasks
+Accept: application/json
+
+### Создание проекта
+POST http://localhost:8080/api/projects
+Content-Type: application/json
+
+{
+  "name": "Список дел на неделю"
+}
+
+### Создание задачи внутри проекта номер 1
+POST http://localhost:8080/api/projects/1/tasks
+Content-Type: application/json
+
+{
+  "title": "Подключить к проекту гит",
+  "description": "Посмотреть видео(освежить память) про гит, подключить к проекту и использовать"
+}
+
+### Создание еще задачи внутри проекта номер 1
+POST http://localhost:8080/api/projects/1/tasks
+Content-Type: application/json
+
+{
+  "title": "Тест",
+  "description": "Тест"
+}
+
+### Получение всех задач проекта номер 1
+GET http://localhost:8080/api/projects/1/tasks
+Accept: application/json
+
+### Получение всех задач проекта номер 100
+GET http://localhost:8080/api/projects/100/tasks
+Accept: application/json
+
+### Удаление проекта и всех его задач (каскадом)
+DELETE http://localhost:8080/api/projects/1
+Accept: application/json
+
+### Обновление имени проекта
+PATCH http://localhost:8080/api/projects/1
+Content-Type: application/json
+
+{
+  "name": "Тест"
+}
+
+### Пакетное создание задач
+POST http://localhost:8080/api/projects/1/tasks/batch
+Content-Type: application/json
+
+[
+  {
+    "title": "Задача 1",
+    "description": "Описание 1"
+  },
+  {
+    "title": "Задача 2",
+    "description": "Описание 2"
+  },
+  {
+    "title": "Задача 3",
+    "description": "Описание 3"
+  }
+]
+
+### Попытка создать невалидный проект (пустое имя)
+POST http://localhost:8080/api/projects
+Content-Type: application/json
+
+{
+  "name": ""
+}
+
+### Попытка создать невалидный проект (слишком короткое)
+POST http://localhost:8080/api/projects
+Content-Type: application/json
+
+{
+  "name": "Yo"
+}

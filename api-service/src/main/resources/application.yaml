@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: api-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/task_tracker_db
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      # create-drop заставит его удалить таблицу и создать заново при каждом старте.
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true

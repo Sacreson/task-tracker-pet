@@ -1,0 +1,33 @@
+### Java & Gradle Build ###
+build/
+.gradle/
+out/
+bin/
+git init
+
+### Wrapper (Джарник враппера оставляем, это важно!) ###
+!gradle/wrapper/gradle-wrapper.jar
+
+### IntelliJ IDEA (Настройки редактора) ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### VS Code (Если вдруг откроешь в другом редакторе) ###
+.vscode/
+
+### OS Junk (Мусор операционных систем) ###
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+### HTTP Client (Секреты для requests.http) ###
+# Сам файл requests.http коммитить МОЖНО (там примеры запросов)
+# А вот файлы с переменными окружения (пароли) - НЕЛЬЗЯ
+http-client.env.json
+http-client.private.env.json
+
+### Environment / Secrets ###
+.env
+secrets.properties
