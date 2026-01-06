@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class ProjectController {
@@ -26,6 +28,12 @@ public class ProjectController {
 
         return  projectDtoFactory.makeProjectDto(project);
     }
+
+    @GetMapping(value = Constants.PROJECTS, produces = MediaType.APPLICATION_JSON_VALUE) //
+    public List<ProjectDto> getAllProjects() {
+        return projectService.getAllProjects();
+    }
+
 
     @PatchMapping(value = Constants.PROJECTS + "/{project_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ProjectDto updateProjectName(@PathVariable("project_id") Long projectId, @RequestBody UpdateProjectDto updateProjectDto) {

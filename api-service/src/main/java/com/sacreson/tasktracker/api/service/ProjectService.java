@@ -1,5 +1,7 @@
 package com.sacreson.tasktracker.api.service;
 
+import com.sacreson.tasktracker.api.dto.ProjectDto;
+import com.sacreson.tasktracker.api.factories.ProjectDtoFactory;
 import com.sacreson.tasktracker.api.store.entities.ProjectEntity;
 import com.sacreson.tasktracker.api.store.repositories.ProjectRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,11 +10,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final ProjectDtoFactory projectDtoFactory;
 
     @Transactional
     public ProjectEntity createProject(String name) {
@@ -24,6 +30,12 @@ public class ProjectService {
                 .build();
 
         return projectRepository.save(project);
+    }
+
+    public List<ProjectDto> getAllProjects() {
+        return projectRepository.findAll().stream()
+                .map(projectDtoFactory::makeProjectDto) // Используй свою фабрику
+                .collect(Collectors.toList());
     }
 
     @Transactional
