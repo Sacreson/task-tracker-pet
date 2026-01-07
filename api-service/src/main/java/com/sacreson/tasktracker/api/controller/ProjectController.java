@@ -26,6 +26,7 @@ public class ProjectController {
     public ProjectDto createProject(@Valid @RequestBody CreateProjectDto createProjectDto) {
         ProjectEntity project = projectService.createProject(createProjectDto.getName());
 
+        System.out.println("РЕЗУЛЬТАТ СЕРВИСА: " + project.getName());
         return  projectDtoFactory.makeProjectDto(project);
     }
 

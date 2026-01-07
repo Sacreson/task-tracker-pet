@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
 
+    Boolean existsByName(String name);
+
     Optional<ProjectEntity> findByName(String name);
 
     List<ProjectEntity> findAllByNameContainingIgnoreCase(String name);

@@ -22,6 +22,8 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 // JWT (для токенов) - версия для Spring Boot 3
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
