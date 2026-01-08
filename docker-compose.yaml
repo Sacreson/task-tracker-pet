@@ -1,6 +1,5 @@
-version: '3.8'
-
 services:
+  # Сервис Базы Данных
   postgres:
     image: postgres:15-alpine
     container_name: task-tracker-postgres
@@ -13,6 +12,21 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
+
+  # Сервис приложения
+  app:
+    build: ./api-service # Где искать Dockerfile
+    container_name: task-tracker-app
+    ports:
+      - "8080:8080" # Порт приложения
+    environment:
+      # вместо localhost имя сервиса базы данных (postgres)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/task_tracker_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - postgres # Ждем, пока запустится база
 
 volumes:
   postgres_data:

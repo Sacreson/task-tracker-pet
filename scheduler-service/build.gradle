@@ -1,4 +1,4 @@
-plugins {
+node -vnode -vplugins {
     id 'java'
 }
 
