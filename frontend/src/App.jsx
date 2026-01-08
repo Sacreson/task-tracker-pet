@@ -1,73 +1,79 @@
-import { useState } from 'react'
+import Projects from './Projects';
+import { useState } from 'react';
+import { Button, Checkbox, Form, Input, Card, Typography, Alert, message } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
-function App() {
-    // 1. Состояние (State): Храним то, что вводит юзер
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [message, setMessage] = useState('Здесь будет ответ сервера...')
+const { Title } = Typography;
 
-    // 2. Функция, которая срабатывает при нажатии кнопки
-    async function handleLogin() {
-        setMessage("Отправляю запрос...")
+export default function App() {
+    const [token, setToken] = useState(null); // Храним токен, если вошли
+
+    // Эта функция сработает сама, когда форма валидна
+    const onFinish = async (values) => {
+        console.log('Отправляем:', values);
 
         try {
-            // 3. FETCH: Делаем запрос.
-            // Заметь: мы пишем '/api/...', а не 'http://localhost:8080/api...'
-            // Vite сам перенаправит это на бэкенд благодаря настройке Proxy.
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(values), // AntD сам собрал username и password в объект values
+            });
 
-            // 4. Обрабатываем ответ
             if (response.ok) {
-                const data = await response.json()
-                setMessage(`✅ УСПЕХ! Токен: ${data.token.slice(0, 15)}...`)
-                console.log("Полный ответ:", data)
+                const data = await response.json();
+                setToken(data.token);
+                message.success('Успешный вход!'); // Красивое всплывающее уведомление сверху
             } else {
-                setMessage(`❌ ОШИБКА: Статус ${response.status}`)
+                message.error('Ошибка входа: проверьте логин/пароль');
             }
-
         } catch (error) {
-            setMessage(`💀 ОШИБКА СЕТИ: ${error.message}`)
+            message.error('Ошибка сети');
         }
+    };
+
+    // Если мы уже вошли, показываем приветствие
+    if (token) {
+        return <Projects token={token} />;
     }
 
-    // 5. Визуальная часть (HTML/JSX)
+    // Иначе показываем форму входа
     return (
-        <div style={{ padding: "50px", maxWidth: "400px", margin: "0 auto" }}>
-            <h1>Вход в систему 🔐</h1>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#f0f2f5' }}>
+            <Card style={{ width: 400, boxShadow: "0 4px 8px rgba(0,0,0,0.1)" }}>
+                <div style={{ textAlign: 'center', marginBottom: 20 }}>
+                    <Title level={2}>Task Tracker</Title>
+                    <p style={{ color: 'gray' }}>Пожалуйста, войдите в систему</p>
+                </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                <input
-                    placeholder="Username"
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
-                    style={{ padding: "10px", fontSize: "16px" }}
-                />
-
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    style={{ padding: "10px", fontSize: "16px" }}
-                />
-
-                <button
-                    onClick={handleLogin}
-                    style={{ padding: "10px", background: "#007bff", color: "white", border: "none", cursor: "pointer" }}
+                <Form
+                    name="login_form"
+                    initialValues={{ remember: true }}
+                    onFinish={onFinish} // Сюда придут данные при сабмите
+                    size="large"
                 >
-                    Войти
-                </button>
-            </div>
+                    {/* Поле Логина */}
+                    <Form.Item
+                        name="username"
+                        rules={[{ required: true, message: 'Введите логин!' }]}
+                    >
+                        <Input prefix={<UserOutlined />} placeholder="Username" />
+                    </Form.Item>
 
-            <p style={{ marginTop: "20px", fontWeight: "bold" }}>{message}</p>
+                    {/* Поле Пароля */}
+                    <Form.Item
+                        name="password"
+                        rules={[{ required: true, message: 'Введите пароль!' }]}
+                    >
+                        <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" block loading={false}>
+                            Войти
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
         </div>
-    )
+    );
 }
-
-export default App
