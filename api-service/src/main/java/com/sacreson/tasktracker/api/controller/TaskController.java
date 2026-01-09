@@ -60,7 +60,7 @@ public class TaskController {
                 .collect(Collectors.toList());
     }
 
-    @PatchMapping(value = Constants.TASKS + "/{task_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = Constants.TASKS_BY_PROJECT + "/{task_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public TaskDto updateTask(@PathVariable("task_id") Long taskId, @RequestBody UpdateTaskDto updateTaskDto) {
         TaskEntity task = taskService.updateTask(
                 taskId,

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { Table, Button, message, Card, Modal, Input } from 'antd'; // Добавили Modal и Input
 import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 
-export default function Projects({ token }) {
+// Добавь onProjectSelect
+export default function Projects({ token, onProjectSelect }) {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -64,7 +65,17 @@ export default function Projects({ token }) {
 
     const columns = [
         { title: 'ID', dataIndex: 'id', key: 'id', width: 50 },
-        { title: 'Название проекта', dataIndex: 'name', key: 'name', render: (text) => <b>{text}</b> },
+        {
+            title: 'Название проекта',
+            dataIndex: 'name',
+            key: 'name',
+            render: (text, record) => (
+                // При клике вызываем onProjectSelect и передаем ID проекта
+                <a onClick={() => onProjectSelect(record.id)} style={{ fontWeight: 'bold' }}>
+                    {text}
+                </a>
+            )
+        },
     ];
 
     return (
