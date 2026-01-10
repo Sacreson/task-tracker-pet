@@ -1,7 +1,5 @@
 package com.sacreson.tasktracker.api.service;
 
-import com.sacreson.tasktracker.api.dto.ProjectDto;
-import com.sacreson.tasktracker.api.factories.ProjectDtoFactory;
 import com.sacreson.tasktracker.api.store.entities.ProjectEntity;
 import com.sacreson.tasktracker.api.store.repositories.ProjectRepository;
 import org.junit.jupiter.api.Assertions;
@@ -22,51 +20,61 @@ public class ProjectServiceTest {
     @Mock
     private ProjectRepository projectRepository;
 
-    @Mock
-    private ProjectDtoFactory projectDtoFactory;
-
     @InjectMocks
-    private ProjectService projectService; // НАСТОЯЩИЙ сервис, в который Mockito сам вставит моки выше
+    private ProjectService projectService;
 
     @Test
-    void createProject_shouldReturnProjectDto_whenProjectNameIsUnique() {
+    void createProject_shouldReturnProjectEntity_whenProjectNameIsUnique() {
+
         String projectName = "Test Project";
+        Long ownerId = 1L;
+
+
+        Mockito.when(projectRepository.findByNameAndOwnerId(projectName, ownerId))
+                .thenReturn(Optional.empty());
+
 
         ProjectEntity savedEntity = ProjectEntity.builder()
-                .id(1L)
+                .id(10L)
                 .name(projectName)
+                .ownerId(ownerId)
                 .createdAt(Instant.now())
                 .build();
 
-        //учим репозиторий что возвращать при сохр любового объекта
         Mockito.when(projectRepository.save(Mockito.any(ProjectEntity.class)))
                 .thenReturn(savedEntity);
 
-        //учим фабрику что возвращать
-//        Mockito.when(projectDtoFactory.makeProjectDto(savedEntity))
-//                .thenReturn(ProjectDto.builder().id(1L).name(projectName).build());
 
+        ProjectEntity result = projectService.createProject(ownerId, projectName);
 
-        ProjectEntity result = projectService.createProject(projectName);
 
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(1L, result.getId());
+        Assertions.assertEquals(10L, result.getId());
         Assertions.assertEquals(projectName, result.getName());
+        Assertions.assertEquals(ownerId, result.getOwnerId());
 
-        //чекаем что сервис реально вызывал у репо 1 раз метод сейв
-        Mockito.verify(projectRepository, Mockito.times(1)).save(Mockito.any(ProjectEntity.class));
+
+        Mockito.verify(projectRepository, Mockito.times(1))
+                .findByNameAndOwnerId(projectName, ownerId);
+        Mockito.verify(projectRepository, Mockito.times(1))
+                .save(Mockito.any(ProjectEntity.class));
     }
 
     @Test
     void createProject_shouldThrowException_whenProjectNameAlreadyExists() {
+        // ARRANGE
         String existingName = "Existing Project";
+        Long ownerId = 1L;
 
-        Mockito.when(projectRepository.findByName(existingName))
+
+        Mockito.when(projectRepository.findByNameAndOwnerId(existingName, ownerId))
                 .thenReturn(Optional.of(ProjectEntity.builder().name(existingName).build()));
 
-        Assertions.assertThrows(ResponseStatusException.class, () ->
-                projectService.createProject(existingName));
 
-        Mockito.verify(projectRepository, Mockito.never()).save(Mockito.any(ProjectEntity.class));
+        Assertions.assertThrows(ResponseStatusException.class, () ->
+                projectService.createProject(ownerId, existingName));
+
+
+        Mockito.verify(projectRepository, Mockito.never()).save(Mockito.any());
     }
 }
