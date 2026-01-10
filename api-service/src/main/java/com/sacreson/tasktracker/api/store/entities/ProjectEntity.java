@@ -23,11 +23,14 @@ public class ProjectEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TaskEntity> tasks = new ArrayList<>();
+
+    @Column(name = "owner_id", nullable = false)
+    private Long ownerId;
 
     @CreationTimestamp
     private Instant createdAt;

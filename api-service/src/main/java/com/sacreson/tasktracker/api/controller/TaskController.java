@@ -72,7 +72,7 @@ public class TaskController {
         return taskDtoFactory.makeTaskDto(task);
     }
 
-    @DeleteMapping(value = Constants.TASKS + "/{task_id}")
+    @DeleteMapping(value = Constants.TASKS_BY_PROJECT + "/{task_id}")
     public AckDto deleteTask(@PathVariable("task_id") Long taskId) {
         return AckDto.builder()
                 .answer(taskService.deleteTask(taskId))

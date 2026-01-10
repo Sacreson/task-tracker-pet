@@ -20,13 +20,18 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectDtoFactory projectDtoFactory;
 
+    public List<ProjectEntity> getProjects(Long userId) {
+        return projectRepository.findAllByOwnerId(userId);
+    }
+
     @Transactional
-    public ProjectEntity createProject(String name) {
-        if (projectRepository.findByName(name).isPresent()) {
+    public ProjectEntity createProject(Long ownerId, String name) {
+        if (projectRepository.findByNameAndOwnerId(name, ownerId).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Project already exists");
         }
         ProjectEntity project = ProjectEntity.builder()
                 .name(name)
+                .ownerId(ownerId)
                 .build();
 
         return projectRepository.save(project);
@@ -39,11 +44,11 @@ public class ProjectService {
     }
 
     @Transactional
-    public ProjectEntity updateProject(Long id, String name) {
+    public ProjectEntity updateProject(Long id, String name, Long ownerId) {
         ProjectEntity project = projectRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Project not found"));
 
-        if (projectRepository.findByName(name).isPresent()) {
+        if (projectRepository.findByNameAndOwnerId(name, ownerId).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Project already exists");
         }
         project.setName(name);
@@ -51,11 +56,12 @@ public class ProjectService {
     }
 
     @Transactional
-    public Boolean deleteProject(Long id) {
-        projectRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
+    public Boolean deleteProject(Long ownerId, Long projectId) {
+        ProjectEntity project = projectRepository.findById(projectId)
+                .filter(p -> p.getOwnerId().equals(ownerId)) // Проверка владельца
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project nod found or not owned"));
 
-        projectRepository.deleteById(id);
+        projectRepository.delete(project);
         return true;
     }
 }

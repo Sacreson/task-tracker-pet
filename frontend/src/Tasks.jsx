@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Button, message, Card, List, Input, Checkbox, Typography } from 'antd';
-import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, message, Card, List, Input, Checkbox, Typography, Popconfirm } from 'antd'; // + Popconfirm
+import { ArrowLeftOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons'; // + DeleteOutlined
 
 const { Text } = Typography;
 
@@ -88,6 +88,26 @@ export default function Tasks({ token, projectId, onBack }) {
         }
     };
 
+    const handleDeleteTask = async (taskId) => {
+        try {
+            // Путь к задаче. projectId берем из пропсов, taskId из аргумента
+            const response = await fetch(`/api/projects/${projectId}/tasks/${taskId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                message.success('Задача удалена');
+                // Убираем задачу из списка без лишнего запроса к серверу (оптимизация!)
+                setTasks(current => current.filter(t => t.id !== taskId));
+            } else {
+                message.error('Не удалось удалить');
+            }
+        } catch (e) {
+            message.error('Ошибка сети');
+        }
+    };
+
     return (
         <div style={{ padding: '50px', maxWidth: '600px', margin: '0 auto' }}>
             <Button icon={<ArrowLeftOutlined />} onClick={onBack} style={{ marginBottom: 16 }}>
@@ -111,13 +131,23 @@ export default function Tasks({ token, projectId, onBack }) {
                     loading={loading}
                     dataSource={tasks}
                     renderItem={(task) => (
-                        <List.Item>
-                            {/* 🔥 ОБНОВЛЕННЫЙ ЧЕКБОКС */}
+                        <List.Item
+                            actions={[
+                                <Popconfirm
+                                    title="Удалить задачу?"
+                                    onConfirm={() => handleDeleteTask(task.id)}
+                                    okText="Да"
+                                    cancelText="Нет"
+                                >
+                                    <Button type="text" danger icon={<DeleteOutlined />} />
+                                </Popconfirm>
+                            ]}
+                        >
                             <Checkbox
                                 checked={task.status === 'DONE'}
-                                onChange={() => toggleTaskStatus(task)} // При клике вызываем функцию
+                                onChange={() => toggleTaskStatus(task)}
+                                style={{ width: '100%' }} // Чтобы клик был удобнее
                             >
-                                {/* Если DONE, текст зачеркнут */}
                                 <Text delete={task.status === 'DONE'}>{task.title}</Text>
                             </Checkbox>
                         </List.Item>

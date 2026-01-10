@@ -10,7 +10,9 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity, Long> {
 
     Boolean existsByName(String name);
 
-    Optional<ProjectEntity> findByName(String name);
-
     List<ProjectEntity> findAllByNameContainingIgnoreCase(String name);
+
+    List<ProjectEntity> findAllByOwnerId(Long ownerId);
+
+    Optional<ProjectEntity> findByNameAndOwnerId(String name, Long ownerId);
 }

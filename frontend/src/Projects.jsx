@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Table, Button, message, Card, Modal, Input } from 'antd'; // Добавили Modal и Input
-import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Table, Button, message, Card, Modal, Input, Popconfirm } from 'antd';
+import { PlusOutlined, ReloadOutlined, DeleteOutlined } from '@ant-design/icons';
 
 // Добавь onProjectSelect
 export default function Projects({ token, onProjectSelect }) {
@@ -76,7 +76,41 @@ export default function Projects({ token, onProjectSelect }) {
                 </a>
             )
         },
+        {
+            title: '',
+            key: 'actions',
+            width: 50,
+            render: (_, record) => (
+                <Popconfirm
+                    title="Удалить проект?"
+                    description="Все задачи тоже могут исчезнуть."
+                    onConfirm={() => handleDeleteProject(record.id)}
+                    okText="Да"
+                    cancelText="Нет"
+                >
+                    <Button type="text" danger icon={<DeleteOutlined />} />
+                </Popconfirm>
+            ),
+        },
     ];
+
+    const handleDeleteProject = async (projectId) => {
+        try {
+            const response = await fetch(`/api/projects/${projectId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                message.success('Проект удален');
+                fetchProjects(); // Обновляем таблицу
+            } else {
+                message.error('Ошибка удаления');
+            }
+        } catch (e) {
+            message.error('Ошибка сети');
+        }
+    };
 
     return (
         <div style={{ padding: '50px' }}>
