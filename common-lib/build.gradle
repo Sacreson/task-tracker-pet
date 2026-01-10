@@ -1,13 +1,37 @@
-// Отключаем создание исполняемого jar (это просто библиотека)
-bootJar {
-    enabled = false
+plugins {
+    id 'java-library' // Это говорит Gradle, что модуль - библиотека
+    id 'io.spring.dependency-management'
 }
 
-jar {
-    enabled = true
+group = 'com.sacreson'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+// Управляем версиями Spring Boot централизованно
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:3.2.1"
+    }
 }
 
 dependencies {
-    // Сюда будем класть зависимости, общие для всех (например, DTO валидации)
-    // Пока пусто, lombok и test уже прилетели из корня
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+}
+
+java {
+    sourceCompatibility = '17'
+}
+
+bootJar {
+    enabled = false // Отключаем создание запускаемого JAR (он ищет main класс)
+}
+
+jar {
+    enabled = true // Включаем создание обычного JAR (просто библиотека)
 }

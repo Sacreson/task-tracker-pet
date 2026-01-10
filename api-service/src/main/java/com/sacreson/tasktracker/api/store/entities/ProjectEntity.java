@@ -26,6 +26,7 @@ public class ProjectEntity {
     @Column(nullable = false)
     private String name;
 
+    @Builder.Default
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<TaskEntity> tasks = new ArrayList<>();
 
