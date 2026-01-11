@@ -10,7 +10,7 @@ spring:
     show-sql: true
     hibernate:
       # create-drop заставит его удалить таблицу и создать заново при каждом старте.
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
