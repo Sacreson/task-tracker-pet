@@ -1,7 +1,7 @@
 package com.sacreson.tasktracker.api.factories;
 
 import com.sacreson.tasktracker.api.dto.UserDto;
-import com.sacreson.tasktracker.api.store.entities.UserEntity;
+import com.sacreson.tasktracker.store.entities.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component

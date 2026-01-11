@@ -1,6 +1,6 @@
-package com.sacreson.tasktracker.api.store.entities;
+package com.sacreson.tasktracker.store.entities;
 
-import com.sacreson.tasktracker.api.store.enums.Role;
+import com.sacreson.tasktracker.store.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

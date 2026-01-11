@@ -6,7 +6,7 @@ import com.sacreson.tasktracker.api.dto.RegisterUserDto;
 import com.sacreson.tasktracker.api.dto.UserDto;
 import com.sacreson.tasktracker.api.factories.UserDtoFactory;
 import com.sacreson.tasktracker.api.service.UserService;
-import com.sacreson.tasktracker.api.store.entities.UserEntity;
+import com.sacreson.tasktracker.store.entities.UserEntity;
 import com.sacreson.tasktracker.api.utils.Constants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

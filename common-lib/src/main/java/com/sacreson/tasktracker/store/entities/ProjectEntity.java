@@ -1,4 +1,4 @@
-package com.sacreson.tasktracker.api.store.entities;
+package com.sacreson.tasktracker.store.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

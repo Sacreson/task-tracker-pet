@@ -1,6 +1,6 @@
 package com.sacreson.tasktracker.api.dto;
 
-import com.sacreson.tasktracker.api.store.enums.TaskStatus;
+import com.sacreson.tasktracker.store.enums.TaskStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

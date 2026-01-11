@@ -1,4 +1,4 @@
-package com.sacreson.tasktracker.api.store.enums;
+package com.sacreson.tasktracker.store.enums;
 
 import jakarta.persistence.Entity;
 import lombok.Getter;

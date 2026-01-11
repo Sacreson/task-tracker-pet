@@ -1,7 +1,7 @@
 package com.sacreson.tasktracker.api.service;
 
-import com.sacreson.tasktracker.api.store.entities.ProjectEntity;
-import com.sacreson.tasktracker.api.store.repositories.ProjectRepository;
+import com.sacreson.tasktracker.store.entities.ProjectEntity;
+import com.sacreson.tasktracker.store.repositories.ProjectRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

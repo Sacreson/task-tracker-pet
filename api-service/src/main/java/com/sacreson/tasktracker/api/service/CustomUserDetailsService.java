@@ -1,6 +1,6 @@
 package com.sacreson.tasktracker.api.service;
 
-import com.sacreson.tasktracker.api.store.repositories.UserRepository;
+import com.sacreson.tasktracker.store.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Collections;
 
 @Service

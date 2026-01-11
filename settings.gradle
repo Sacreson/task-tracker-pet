@@ -1,5 +1,5 @@
 rootProject.name = 'task-tracker-pet'
 include 'api-service'
-//include 'scheduler-service'
+include 'scheduler-service'
 //include 'email-service'
 include 'common-lib'

@@ -2,21 +2,19 @@ package com.sacreson.tasktracker.api.service;
 
 import com.sacreson.tasktracker.api.dto.CreateTaskDto;
 import com.sacreson.tasktracker.api.dto.UpdateTaskDto;
-import com.sacreson.tasktracker.api.store.entities.ProjectEntity;
-import com.sacreson.tasktracker.api.store.entities.TaskEntity;
-import com.sacreson.tasktracker.api.store.enums.TaskStatus;
-import com.sacreson.tasktracker.api.store.repositories.ProjectRepository;
-import com.sacreson.tasktracker.api.store.repositories.TaskRepository;
+import com.sacreson.tasktracker.store.entities.ProjectEntity;
+import com.sacreson.tasktracker.store.entities.TaskEntity;
+import com.sacreson.tasktracker.store.enums.TaskStatus;
+import com.sacreson.tasktracker.store.repositories.ProjectRepository;
+import com.sacreson.tasktracker.store.repositories.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

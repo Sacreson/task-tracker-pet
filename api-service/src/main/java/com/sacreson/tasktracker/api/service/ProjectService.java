@@ -2,8 +2,8 @@ package com.sacreson.tasktracker.api.service;
 
 import com.sacreson.tasktracker.api.dto.ProjectDto;
 import com.sacreson.tasktracker.api.factories.ProjectDtoFactory;
-import com.sacreson.tasktracker.api.store.entities.ProjectEntity;
-import com.sacreson.tasktracker.api.store.repositories.ProjectRepository;
+import com.sacreson.tasktracker.store.entities.ProjectEntity;
+import com.sacreson.tasktracker.store.repositories.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

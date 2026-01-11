@@ -7,16 +7,12 @@ import com.sacreson.tasktracker.api.dto.UpdateTaskDto;
 import com.sacreson.tasktracker.api.factories.TaskDtoFactory;
 import com.sacreson.tasktracker.api.security.CustomUserDetails;
 import com.sacreson.tasktracker.api.service.TaskService;
-import com.sacreson.tasktracker.api.store.entities.TaskEntity;
-import com.sacreson.tasktracker.api.store.repositories.TaskRepository;
+import com.sacreson.tasktracker.store.entities.TaskEntity;
 import com.sacreson.tasktracker.api.utils.Constants;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,8 +1,7 @@
 package com.sacreson.tasktracker.api.factories;
 
 import com.sacreson.tasktracker.api.dto.TaskDto;
-import com.sacreson.tasktracker.api.store.entities.TaskEntity;
-import org.springframework.scheduling.config.Task;
+import com.sacreson.tasktracker.store.entities.TaskEntity;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -6,9 +6,9 @@ import com.sacreson.tasktracker.api.dto.ProjectDto;
 import com.sacreson.tasktracker.api.dto.UpdateProjectDto;
 import com.sacreson.tasktracker.api.factories.ProjectDtoFactory;
 import com.sacreson.tasktracker.api.service.ProjectService;
-import com.sacreson.tasktracker.api.store.entities.ProjectEntity;
-import com.sacreson.tasktracker.api.store.entities.UserEntity;
-import com.sacreson.tasktracker.api.store.repositories.UserRepository;
+import com.sacreson.tasktracker.store.entities.ProjectEntity;
+import com.sacreson.tasktracker.store.entities.UserEntity;
+import com.sacreson.tasktracker.store.repositories.UserRepository;
 import com.sacreson.tasktracker.api.utils.Constants;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController

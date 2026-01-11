@@ -1,6 +1,6 @@
-package com.sacreson.tasktracker.api.store.repositories;
+package com.sacreson.tasktracker.store.repositories;
 
-import com.sacreson.tasktracker.api.store.entities.TaskEntity;
+import com.sacreson.tasktracker.store.entities.TaskEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

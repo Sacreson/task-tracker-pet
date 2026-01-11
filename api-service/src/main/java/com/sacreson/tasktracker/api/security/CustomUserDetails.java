@@ -1,10 +1,9 @@
 package com.sacreson.tasktracker.api.security;
 
-import com.sacreson.tasktracker.api.store.entities.UserEntity;
+import com.sacreson.tasktracker.store.entities.UserEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;

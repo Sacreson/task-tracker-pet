@@ -1,6 +1,6 @@
-package com.sacreson.tasktracker.api.store.entities;
+package com.sacreson.tasktracker.store.entities;
 
-import com.sacreson.tasktracker.api.store.enums.TaskStatus;
+import com.sacreson.tasktracker.store.enums.TaskStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,9 +12,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Builder
 @Data
