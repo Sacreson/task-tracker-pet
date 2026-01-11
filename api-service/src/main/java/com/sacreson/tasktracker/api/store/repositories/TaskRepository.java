@@ -14,5 +14,7 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
 
     List<TaskEntity> findAllByTitleContainingIgnoreCase(String title);
 
+    Optional<TaskEntity> findByTitleAndProjectId(String title, Long projectId);
+
     List<TaskEntity> findAllByProjectId(Long projectId);
 }

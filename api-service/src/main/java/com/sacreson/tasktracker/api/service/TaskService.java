@@ -1,6 +1,7 @@
 package com.sacreson.tasktracker.api.service;
 
 import com.sacreson.tasktracker.api.dto.CreateTaskDto;
+import com.sacreson.tasktracker.api.dto.UpdateTaskDto;
 import com.sacreson.tasktracker.api.store.entities.ProjectEntity;
 import com.sacreson.tasktracker.api.store.entities.TaskEntity;
 import com.sacreson.tasktracker.api.store.enums.TaskStatus;
@@ -36,22 +37,29 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskEntity createTask(String title, String description, Long projectId) {
-        log.debug("Request to create task. Title: {}, Description: {}, ProjectId: {}", title, description, projectId);
+    public TaskEntity createTask(String title, String description, Long projectId, Long ownerId) {
+        log.debug("Request to create task. Title: {}, ProjectId: {}, OwnerId: {}", title, projectId, ownerId);
+
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
-        // проверка на уникальность
-        if (taskRepository.findByTitle(title).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task already exists");
+
+        if (!project.getOwnerId().equals(ownerId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
+        }
+
+        if (taskRepository.findByTitleAndProjectId(title, projectId).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task with this title already exists in the project");
         }
 
         TaskEntity task = TaskEntity.builder()
                 .title(title)
-                .project(project)
                 .description(description)
+                .project(project)
+                .status(TaskStatus.TODO)
                 .build();
 
         TaskEntity saved = taskRepository.save(task);
+
         log.info("Task created successfully. ID: {}, Title: {}, ProjectId: {}", saved.getId(), saved.getTitle(), projectId);
         return saved;
     }
@@ -77,25 +85,35 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskEntity updateTask(Long taskId, String title, String description, TaskStatus status) {
-        log.debug("Request to update task. TaskId: {}, Title: {}, Description: {}, Status: {}", taskId, title, description, status);
+    public TaskEntity updateTask(Long projectId, Long taskId, UpdateTaskDto dto, Long ownerId) {
         TaskEntity task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
 
-        if (title != null) {
-            // TODO Тут можно сделать потом проверку на уникальность
-            task.setTitle(title);
+        if (!task.getProject().getId().equals(projectId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task does not belong to this project");
         }
-        if (description != null) {
-            task.setDescription(description);
+
+        if (!task.getProject().getOwnerId().equals(ownerId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found or access denied");
         }
-        if (status != null) {
-            task.setStatus(status);
+
+        if (dto.getTitle() != null && !dto.getTitle().isBlank()) {
+            task.setTitle(dto.getTitle());
         }
-        // save вызывать не обязательно, если стоит @Transactional,
-        TaskEntity saved = taskRepository.save(task);
-        log.info("Task updated successfully. ID: {}, Title: {}, Description: {}, Status: {}", taskId, saved.getTitle(), saved.getDescription(), saved.getStatus());
-        return saved;
+
+        if (dto.getDescription() != null) {
+            task.setDescription(dto.getDescription());
+        }
+
+        if (dto.getStatus() != null) {
+            task.setStatus(dto.getStatus());
+        }
+
+        TaskEntity updatedTask = taskRepository.save(task);
+
+        log.info("Task updated. ID: {}, ProjectId: {}, OwnerId: {}", taskId, projectId, ownerId);
+
+        return updatedTask;
     }
 
     @Transactional

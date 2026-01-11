@@ -5,6 +5,7 @@ import com.sacreson.tasktracker.api.dto.CreateTaskDto;
 import com.sacreson.tasktracker.api.dto.TaskDto;
 import com.sacreson.tasktracker.api.dto.UpdateTaskDto;
 import com.sacreson.tasktracker.api.factories.TaskDtoFactory;
+import com.sacreson.tasktracker.api.security.CustomUserDetails;
 import com.sacreson.tasktracker.api.service.TaskService;
 import com.sacreson.tasktracker.api.store.entities.TaskEntity;
 import com.sacreson.tasktracker.api.store.repositories.TaskRepository;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -42,9 +44,18 @@ public class TaskController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping(value = Constants.TASKS_BY_PROJECT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public TaskDto createTask(@PathVariable("project_id") Long projectId, @RequestBody CreateTaskDto createTaskDto) throws BadRequestException {
-        TaskEntity task = taskService.createTask(createTaskDto.getTitle(), createTaskDto.getDescription(), projectId);
+    @PostMapping
+    public TaskDto createTask(
+            @PathVariable("project_id") Long projectId,
+            @RequestBody CreateTaskDto dto,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        TaskEntity task = taskService.createTask(
+                dto.getTitle(),
+                dto.getDescription(),
+                projectId,
+                userDetails.getId()
+        );
 
         return taskDtoFactory.makeTaskDto(task);
     }
@@ -61,12 +72,18 @@ public class TaskController {
     }
 
     @PatchMapping(value = Constants.TASKS_BY_PROJECT + "/{task_id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public TaskDto updateTask(@PathVariable("task_id") Long taskId, @RequestBody UpdateTaskDto updateTaskDto) {
+    public TaskDto updateTask(
+            @PathVariable("project_id") Long projectId,
+            @PathVariable("task_id") Long taskId,
+            @RequestBody UpdateTaskDto updateTaskDto,
+            // 👇 Достаем текущего юзера (убедись, что хелпер или сервис у тебя есть)
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
         TaskEntity task = taskService.updateTask(
+                projectId,
                 taskId,
-                updateTaskDto.getTitle(),
-                updateTaskDto.getDescription(),
-                updateTaskDto.getStatus()
+                updateTaskDto,
+                userDetails.getId()
         );
 
         return taskDtoFactory.makeTaskDto(task);
